@@ -2,11 +2,14 @@ package app.project.classes;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import java.awt.*;
+import java.awt.event.InputEvent;
 import java.util.Set;
 
 public class SetUpPage {
@@ -56,9 +59,9 @@ public class SetUpPage {
         return getDriver().findElement(locator);
     }
 
-    public boolean isDisplay(By locator){
+    public boolean isDisplay(WebElement element){
         try {
-            return getDriver().findElement(locator).isDisplayed();
+            return element.isDisplayed();
         } catch(org.openqa.selenium.NoSuchElementException e) {
             return false;
         }
@@ -95,6 +98,18 @@ public class SetUpPage {
 
     public void switchWindow(String windowHandle){
         getDriver().switchTo().window(windowHandle);
+    }
+
+    public void selectSecondAd (WebElement element) throws AWTException, InterruptedException {
+        Point p = element.getLocation();
+        int x= p.getX();
+        int y= p.getY();
+        Robot robot = new Robot();
+        robot.mouseMove(x,y);
+        Thread.sleep(2000);
+        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+        Thread.sleep(2000);
     }
 
     public WebDriver getDriver() {

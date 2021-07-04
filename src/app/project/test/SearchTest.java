@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import java.awt.*;
 
 public class SearchTest {
         private WebDriver driver;
@@ -15,7 +16,7 @@ public class SearchTest {
         @BeforeTest
         public void openAliExpress(){
                 searchPage = new SearchAliExpress(driver);
-                driver = searchPage.CreateMyDriver(DRIVERS.CHROME);
+                driver = searchPage.CreateMyDriver(DRIVERS.FIREFOX);
                 searchPage.visitTo(baseURL);
         }
 
@@ -37,7 +38,7 @@ public class SearchTest {
         }
 
         @Test(priority = 2)
-        public void secondAd(){
+        public void secondAd() throws InterruptedException, AWTException {
                 System.out.println("------------------TEST 3------------------\n");
                 searchPage.hasStockSecondAd();
         }
