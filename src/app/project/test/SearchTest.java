@@ -3,6 +3,7 @@ package app.project.test;
 import app.project.classes.DRIVERS;
 import app.project.classes.SearchAliExpress;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -10,14 +11,20 @@ import java.awt.*;
 
 public class SearchTest {
         private WebDriver driver;
-        String baseURL = "https://www.aliexpress.com/";
-        SearchAliExpress searchPage;
+        private String expectedResult = null;
+        private String actualResult = null;
+        private String baseURL = "https://www.aliexpress.com/";
+        private SearchAliExpress searchPage;
 
         @BeforeTest
         public void openAliExpress(){
                 searchPage = new SearchAliExpress(driver);
-                driver = searchPage.CreateMyDriver(DRIVERS.FIREFOX);
+                driver = searchPage.CreateMyDriver(DRIVERS.CHROME);
                 searchPage.visitTo(baseURL);
+
+                expectedResult = "AliExpress - Online Shopping for Popular Electronics, Fashion, Home & Garden, Toys & Sports, Automobiles and More products - AliExpress";
+                actualResult = searchPage.getTitlePage();
+                searchPage.assertEquals(actualResult, expectedResult);
         }
 
         @AfterTest
@@ -29,18 +36,24 @@ public class SearchTest {
         public void searchItem(){
                 System.out.println("------------------TEST 1------------------\n");
                 searchPage.searchBoxItem();
+
+                expectedResult = "Iphone - Buy Iphone with free shipping on AliExpress";
+                actualResult = searchPage.getTitlePage();
+                searchPage.assertEquals(actualResult, expectedResult);
         }
 
         @Test(priority = 1)
-        public void secondPage(){
+        public void navigateToPage(){
                 System.out.println("------------------TEST 2------------------\n");
-                searchPage.goToSecondPage();
+                searchPage.goToPage();
         }
 
         @Test(priority = 2)
-        public void secondAd() throws InterruptedException, AWTException {
+        public void stockProduct() throws InterruptedException, AWTException {
                 System.out.println("------------------TEST 3------------------\n");
-                searchPage.hasStockSecondAd();
+                searchPage.assertTrue(searchPage.hasStock());
         }
+
+
 
 }

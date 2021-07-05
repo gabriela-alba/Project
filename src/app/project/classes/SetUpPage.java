@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.testng.Assert;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.Set;
@@ -16,14 +18,14 @@ public class SetUpPage {
 
     private WebDriver driver;
     //setProperty for Chrome
-    String driverChrome = "webdriver.chrome.driver";
-    String chromePath = System.getProperty("user.dir") + "\\drivers\\chromedriver.exe";
+    private String driverChrome = "webdriver.chrome.driver";
+    private String chromePath = System.getProperty("user.dir") + "\\drivers\\chromedriver.exe";
     //setProperty for IE
-    String driverIE = "webdriver.ie.driver";
-    String iePath = System.getProperty("user.dir") + "\\drivers\\IEDriverServer.exe";
+    private String driverIE = "webdriver.ie.driver";
+    private String iePath = System.getProperty("user.dir") + "\\drivers\\IEDriverServer.exe";
     //setProperty for Firefox
-    String driverfirefox = "webdriver.gecko.driver";
-    String firefoxPath = System.getProperty("user.dir") + "\\drivers\\geckodriver.exe";
+    private String driverfirefox = "webdriver.gecko.driver";
+    private String firefoxPath = System.getProperty("user.dir") + "\\drivers\\geckodriver.exe";
 
     public SetUpPage(WebDriver driver){
         this.driver = driver;
@@ -84,32 +86,53 @@ public class SetUpPage {
         js.executeScript("window.scrollBy(0,3500)","");
     }
 
-    public void windowHandle(){
-        String mainWindow = getDriver().getWindowHandle();
-
+    public boolean windowHandle(){
+        String mainWindow = getWindowHandle();
+        boolean isOtherPage = false;
         Set<String> windowHandles = getDriver().getWindowHandles();
         String otherWindow = null;
         for(String windowHandle: windowHandles){
             if(!windowHandle.equals(mainWindow))
                 otherWindow = windowHandle;
+                isOtherPage = true;
         }
         switchWindow(otherWindow);
+
+        return isOtherPage;
+    }
+
+    public String getWindowHandle(){
+        return getDriver().getWindowHandle();
     }
 
     public void switchWindow(String windowHandle){
         getDriver().switchTo().window(windowHandle);
     }
 
-    public void selectSecondAd (WebElement element) throws AWTException, InterruptedException {
+    public void selectProduct (WebElement element) throws AWTException, InterruptedException {
         Point p = element.getLocation();
-        int x= p.getX();
-        int y= p.getY();
+        int x = p.getX();
+        int y = p.getY();
+
         Robot robot = new Robot();
+
         robot.mouseMove(x,y);
         Thread.sleep(2000);
         robot.mousePress(InputEvent.BUTTON1_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
         Thread.sleep(2000);
+    }
+
+    public String getTitlePage(){
+        return getDriver().getTitle();
+    }
+
+    public void assertEquals(String actualResult, String expectedResult){
+        Assert.assertEquals(actualResult, expectedResult);
+    }
+
+    public void assertTrue(boolean testResult){
+        Assert.assertTrue(testResult);
     }
 
     public WebDriver getDriver() {
